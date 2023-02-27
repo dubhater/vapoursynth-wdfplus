@@ -38,5 +38,7 @@ def WDFPlus(input, strength=6, tmax=10, tmin=7, gpu=True):
     msk     = core.misc.Hysteresis(clipa=msk_tmax, clipb=msk_tmin)
     msk     = core.std.Convolution(clip=msk, matrix=blur_1_matrix)
     out     = core.std.MaskedMerge(clipa=owarp, clipb=pad, mask=msk).std.Crop(left=4, right=4, top=4, bottom=4)
+    if src.format.color_family == vs.YUV:
+        out = core.std.ShufflePlanes(clips=[out, src], planes=[0, 1, 2], colorfamily=vs.YUV)
     final   = core.std.CopyFrameProps(clip=out, prop_src=input)
     return final
