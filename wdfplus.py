@@ -16,8 +16,9 @@ def WDFPlus(input, strength=6, tmax=10, tmin=7, gpu=True):
     src     = input
     w       = src.width
     h       = src.height
-    pad     = core.resize.Point(clip=src, width=w+8, height=h+8, src_left=-4, src_top=-4, src_width=w+8, src_height=h+8)
-    grey    = core.std.ShufflePlanes(clips=pad, planes=0, colorfamily=vs.GRAY)
+    grey    = core.std.ShufflePlanes(clips=src, planes=0, colorfamily=vs.GRAY)
+    pad     = core.resize.Point(clip=grey, width=w+8, height=h+8, src_left=-4, src_top=-4, src_width=w+8, src_height=h+8)
+    grey    = pad
     if gpu:
         up2 = edi.nnedi3cl_rpow2(clip=grey, rfactor=2, correct_shift=None)
     else:
